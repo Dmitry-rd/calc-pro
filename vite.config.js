@@ -1,15 +1,15 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [vue()],
+  root: 'public',
   base: '/calc-pro/',
   server: {
     port: 3000,
     open: true
   },
   build: {
-    outDir: 'dist',
+    outDir: '../dist',
+    emptyOutDir: true,
     assetsDir: 'assets'
   }
-})
+});

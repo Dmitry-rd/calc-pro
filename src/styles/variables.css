@@ -1,0 +1,33 @@
+/* CSS Variables - Design System */
+:root {
+  /* Colors */
+  --primary: #5865F2;
+  --primary-hover: #4752C4;
+  --primary-light: #7983F5;
+  --success: #3BA55C;
+  --success-hover: #339b4f;
+  --danger: #ED4245;
+  --warning: #FF9500;
+
+  /* Backgrounds */
+  --bg: #F8F9FA;
+  --surface: #FFFFFF;
+  --surface-2: #F2F3F5;
+  --surface-3: #E3E5E8;
+
+  /* Borders & Text */
+  --border: #D1D5DB;
+  --text: #2E3338;
+  --text-muted: #747F8D;
+
+  /* Shadows */
+  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.05), 0 5px 10px rgba(0,0,0,0.03);
+
+  /* Radius */
+  --radius: 12px;
+  --radius-sm: 6px;
+
+  /* Transitions */
+  --transition: 0.2s ease;
+}

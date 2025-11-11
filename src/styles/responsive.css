@@ -1,0 +1,38 @@
+/* Responsive Styles */
+
+/* Desktop */
+@media (min-width: 961px) {
+  .header-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 960px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+    margin: 10px auto;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+
+  .header-wrapper {
+    position: relative !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 8px;
+    margin: 8px auto;
+  }
+}

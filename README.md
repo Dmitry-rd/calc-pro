@@ -1,6 +1,6 @@
 # CalcPRO 2.0
 
-Современная экосистема полиграфических калькуляторов на Vue.js
+Модульная экосистема полиграфических калькуляторов на Vanilla JavaScript
 
 ## 🎨 Дизайн
 
@@ -38,38 +38,70 @@ npm run preview
 
 ```
 calc-pro/
-├── src/
-│   ├── components/          # UI компоненты
-│   │   ├── AppHeader.vue   # Шапка приложения
-│   │   └── AppCart.vue     # Корзина расчетов
-│   │
-│   ├── calculators/         # Калькуляторы
-│   │   └── StickersCalculator.vue  # Калькулятор наклеек
-│   │
-│   ├── stores/              # Хранилища Pinia
-│   │   └── cart.js         # Store корзины с localStorage
-│   │
-│   ├── utils/               # Утилиты
-│   │   └── calculations.js # Функции расчетов
-│   │
-│   ├── styles/              # Стили
-│   │   └── main.css        # Глобальные стили
-│   │
-│   ├── App.vue             # Главный компонент
-│   └── main.js             # Точка входа
+├── public/
+│   ├── index.html                 # Главная HTML страница
+│   └── assets/                    # Статические ресурсы
 │
-├── public/                 # Статические файлы
-├── index.html             # HTML шаблон
-├── package.json           # Зависимости
-└── vite.config.js        # Конфигурация Vite
+├── src/
+│   ├── core/                      # 🎯 Ядро приложения
+│   │   ├── App.js                # Главный класс приложения
+│   │   ├── Router.js             # Маршрутизация
+│   │   └── EventBus.js           # Глобальная шина событий
+│   │
+│   ├── components/                # 🧩 Переиспользуемые компоненты
+│   │   ├── ui/                   # Базовые UI элементы
+│   │   │   └── Toast.js
+│   │   ├── layout/               # Компоненты макета
+│   │   │   ├── Header.js
+│   │   │   └── Tabs.js
+│   │   └── cart/                 # Компоненты корзины
+│   │       └── Cart.js
+│   │
+│   ├── calculators/               # 🧮 Калькуляторы
+│   │   ├── BaseCalculator.js     # Базовый класс
+│   │   └── stickers/             # Калькулятор наклеек
+│   │       ├── StickersCalculator.js
+│   │       └── pricing.js
+│   │
+│   ├── services/                  # 🔧 Бизнес-логика
+│   │   ├── CartService.js        # Управление корзиной
+│   │   └── StorageService.js     # Работа с LocalStorage
+│   │
+│   ├── utils/                     # 🛠️ Утилиты
+│   │   ├── calculations.js       # Математические функции
+│   │   └── formatters.js         # Форматирование данных
+│   │
+│   ├── styles/                    # 🎨 Стили
+│   │   ├── variables.css         # CSS переменные
+│   │   ├── base.css
+│   │   ├── components.css
+│   │   ├── layout.css
+│   │   ├── calculators.css
+│   │   └── responsive.css
+│   │
+│   └── main.js                    # Точка входа
+│
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
 ## 🛠 Технологии
 
-- **Vue 3** - прогрессивный JavaScript фреймворк
-- **Pinia** - state management для Vue
-- **Vite** - быстрый сборщик проектов
-- **Inter Font** - современный шрифт от Google Fonts
+- **Vanilla JavaScript** (ES6+ modules)
+- **Vite** - сборщик и dev-сервер
+- **CSS Custom Properties** - дизайн-система
+- **LocalStorage** - хранение данных
+
+## 🏗️ Архитектура
+
+### Ключевые принципы:
+
+1. **Модульность** - каждый калькулятор - независимый модуль
+2. **Event-Driven** - компоненты общаются через EventBus
+3. **Single Responsibility** - каждый класс отвечает за одну задачу
+4. **Dependency Injection** - зависимости через конструктор
+5. **Наследование** - BaseCalculator для переиспользования логики
 
 ## ✨ Основные возможности
 
@@ -105,19 +137,60 @@ calc-pro/
 
 ### Добавление нового калькулятора
 
-1. Создайте файл в `src/calculators/`
-2. Используйте функции из `src/utils/calculations.js`
-3. Подключите store корзины: `import { useCartStore } from '../stores/cart'`
-4. Добавьте компонент в `App.vue`
+```javascript
+// 1. Создать класс калькулятора
+import { BaseCalculator } from '../BaseCalculator.js';
 
-### Стилизация
+export class YourCalculator extends BaseCalculator {
+  constructor(app) {
+    super(app);
+  }
 
-Все CSS-переменные находятся в `src/styles/main.css`:
-- Цвета
-- Отступы
-- Тени
-- Скругления
-- Переходы
+  render() {
+    // Рендер UI
+  }
+
+  calculate() {
+    // Логика расчета
+    return { unitPrice: 0, totalPrice: 0 };
+  }
+
+  prepareCartItem(result) {
+    // Подготовка данных для корзины
+    return {
+      calculator: 'Название',
+      name: 'Товар',
+      description: 'Описание',
+      quantity: '100шт',
+      unitPrice: '10₽',
+      price: 1000
+    };
+  }
+}
+
+// 2. Зарегистрировать в main.js
+app.registerCalculator('your-calc', YourCalculator, {
+  name: 'Ваш калькулятор',
+  icon: '📐'
+});
+```
+
+### API Сервисов
+
+**CartService:**
+```javascript
+cartService.add(item);      // Добавить в корзину
+cartService.getItems();     // Получить товары
+cartService.remove(index);  // Удалить
+cartService.clear();        // Очистить
+```
+
+**EventBus:**
+```javascript
+eventBus.on('event', callback);   // Подписка
+eventBus.emit('event', data);     // Вызов
+eventBus.off('event', callback);  // Отписка
+```
 
 ## 📄 Лицензия
 
